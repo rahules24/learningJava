@@ -1,66 +1,66 @@
 import java.util.ArrayList;
 
 public class Ruta {
-    private ArrayList<Ubicacion> ubicaciones;
-    private boolean vuelveAlInicio;
+    private ArrayList<Ubicacion> locations;
+    private boolean returnsToStart;
 
     public Ruta() {
-        this.ubicaciones = new ArrayList<>();
-        this.vuelveAlInicio = false;
+        this.locations = new ArrayList<>();
+        this.returnsToStart = false;
     }
 
-    public void afegeixUbicacio(Ubicacion ubicacion) {
-        this.ubicaciones.add(ubicacion.clone());
+    public void addLocation(Ubicacion location) {
+        this.locations.add(location.clone());
     }
 
-    public void modificaUbicacioIessim(int pos, Ubicacion ubicacion) {
-        if (pos >= 0 && pos < ubicaciones.size()) {
-            ubicaciones.set(pos, ubicacion.clone());
+    public void modifyLocationAtIndex(int pos, Ubicacion location) {
+        if (pos >= 0 && pos < locations.size()) {
+            locations.set(pos, location.clone());
         }
     }
 
-    public Ubicacion getUbicacioIessim(int pos) {
-        if (pos >= 0 && pos < ubicaciones.size()) {
-            return ubicaciones.get(pos).clone();
+    public Ubicacion getLocationAtIndex(int pos) {
+        if (pos >= 0 && pos < locations.size()) {
+            return locations.get(pos).clone();
         }
         return null;
     }
 
-    public boolean isVuelveAlInicio() {
-        if (ubicaciones.size() > 0) {
-            Ubicacion first = ubicaciones.get(0);
-            Ubicacion last = ubicaciones.get(ubicaciones.size() - 1);
-            vuelveAlInicio = first.esIgual(last);
+    public boolean doesReturnToStart() {
+        if (locations.size() > 0) {
+            Ubicacion first = locations.get(0);
+            Ubicacion last = locations.get(locations.size() - 1);
+            returnsToStart = first.esIgual(last);
         }
-        return vuelveAlInicio;
+        return returnsToStart;
     }
 
-    public double calcularDistancia() {
-        double distanciaTotal = 0;
-        for (int i = 0; i < ubicaciones.size() - 1; i++) {
-            distanciaTotal += ubicaciones.get(i).distancia(ubicaciones.get(i + 1));
+    public double calculateDistance() {
+        double totalDistance = 0;
+        for (int i = 0; i < locations.size() - 1; i++) {
+            totalDistance += locations.get(i).distancia(locations.get(i + 1));
         }
-        if (isVuelveAlInicio()) {
-            distanciaTotal += ubicaciones.get(ubicaciones.size() - 1).distancia(ubicaciones.get(0));
+        if (doesReturnToStart()) {
+            totalDistance += locations.get(locations.size() - 1).distancia(locations.get(0));
         }
-        return distanciaTotal;
+        return totalDistance;
     }
 
-    public Ubicacion calcularUbicacionMasAlNorte() {
-        if (ubicaciones.isEmpty()) return null;
-        Ubicacion masAlNorte = ubicaciones.get(0);
-        for (Ubicacion ubicacion : ubicaciones) {
-            if (ubicacion.getLatitud() > masAlNorte.getLatitud()) {
-                masAlNorte = ubicacion;
+    public Ubicacion calculateNorthernmostLocation() {
+        if (locations.isEmpty()) return null;
+        Ubicacion northernmost = locations.get(0);
+        for (Ubicacion location : locations) {
+            if (location.getLatitud() > northernmost.getLatitud()) {
+                northernmost = location;
             }
         }
-        return masAlNorte.clone();
+        return northernmost.clone();
     }
 
     public String toString() {
-        StringBuilder aux = new StringBuilder("RUTA => nombre de ubicaciones: " + ubicaciones.size());
-        for (int i = 0; i < ubicaciones.size(); i++) {
-            aux.append("\n\tUbicacion posicion ").append(i).append(": ").append(ubicaciones.get(i));
+        StringBuilder aux = new StringBuilder("ROUTE => number of locations: " + locations.size());
+        for (int i = 0; i < locations.size(); i++) {
+            aux.append("\n\tLocation at position ").append(i).append(": ").append(locations.get(i));
         }
         return aux.toString();
     }
