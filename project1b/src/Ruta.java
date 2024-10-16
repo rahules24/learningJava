@@ -1,66 +1,94 @@
-import java.util.ArrayList;
-
 public class Ruta {
-    private ArrayList<Ubicacion> locations;
+    private Ubicacion[] locations;
     private boolean returnsToStart;
+    private int currentSize;
 
+    // Default constructor
     public Ruta() {
-        this.locations = new ArrayList<>();
+        this.locations = new Ubicacion[10]; // Default size of 10
+        this.returnsToStart = false;
+        this.currentSize = 0;
+    }
+
+    // Constructor with fixed size
+    public Ruta(int numLocations) {
+        this.locations = new Ubicacion[numLocations];
+        this.returnsToStart = false;
+        this.currentSize = 0;
+    }
+
+    // Constructor that accepts an array of locations
+    public Ruta(Ubicacion[] inputLocations) {
+        this.locations = new Ubicacion[inputLocations.length];
+        for (Ubicacion loc : inputLocations) {
+            this.addLocation(loc);
+        }
         this.returnsToStart = false;
     }
 
+    // Add a location to the route
     public void addLocation(Ubicacion location) {
-        this.locations.add(location.clone());
-    }
-
-    public void modifyLocationAtIndex(int pos, Ubicacion location) {
-        if (pos >= 0 && pos < locations.size()) {
-            locations.set(pos, location.clone());
+        if (currentSize < locations.length) {
+            locations[currentSize++] = location.clone();
+        } else {
+            System.out.println("Cannot add more locations, array is full.");
         }
     }
 
+    // Modify a location at a given index
+    public void modifyLocationAtIndex(int pos, Ubicacion location) {
+        if (pos >= 0 && pos < currentSize) {
+            locations[pos] = location.clone();
+        }
+    }
+
+    // Get the location at a given index
     public Ubicacion getLocationAtIndex(int pos) {
-        if (pos >= 0 && pos < locations.size()) {
-            return locations.get(pos).clone();
+        if (pos >= 0 && pos < currentSize) {
+            return locations[pos].clone();
         }
         return null;
     }
 
+    // Check if the route returns to the starting point
     public boolean doesReturnToStart() {
-        if (locations.size() > 0) {
-            Ubicacion first = locations.get(0);
-            Ubicacion last = locations.get(locations.size() - 1);
+        if (currentSize > 0) {
+            Ubicacion first = locations[0];
+            Ubicacion last = locations[currentSize - 1];
             returnsToStart = first.esIgual(last);
         }
         return returnsToStart;
     }
 
+    // Calculate total distance of the route
     public double calculateDistance() {
         double totalDistance = 0;
-        for (int i = 0; i < locations.size() - 1; i++) {
-            totalDistance += locations.get(i).distancia(locations.get(i + 1));
+        for (int i = 0; i < currentSize - 1; i++) {
+            totalDistance += locations[i].distancia(locations[i + 1]);  // Uses Ubicacion's distancia method
         }
         if (doesReturnToStart()) {
-            totalDistance += locations.get(locations.size() - 1).distancia(locations.get(0));
+            totalDistance += locations[currentSize - 1].distancia(locations[0]);  // Uses Ubicacion's distancia method
         }
         return totalDistance;
     }
 
+    // Find the northernmost location in the route
     public Ubicacion calculateNorthernmostLocation() {
-        if (locations.isEmpty()) return null;
-        Ubicacion northernmost = locations.get(0);
-        for (Ubicacion location : locations) {
-            if (location.getLatitud() > northernmost.getLatitud()) {
-                northernmost = location;
+        if (currentSize == 0) return null;
+        Ubicacion northernmost = locations[0];
+        for (int i = 1; i < currentSize; i++) {
+            if (locations[i].getLatitud() > northernmost.getLatitud()) {
+                northernmost = locations[i];
             }
         }
         return northernmost.clone();
     }
 
+    // Return a string representation of the route
     public String toString() {
-        StringBuilder aux = new StringBuilder("ROUTE => number of locations: " + locations.size());
-        for (int i = 0; i < locations.size(); i++) {
-            aux.append("\n\tLocation at position ").append(i).append(": ").append(locations.get(i));
+        StringBuilder aux = new StringBuilder("ROUTE => number of locations: " + currentSize);
+        for (int i = 0; i < currentSize; i++) {
+            aux.append("\n\tLocation at position ").append(i).append(": ").append(locations[i]);
         }
         return aux.toString();
     }
