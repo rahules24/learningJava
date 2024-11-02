@@ -53,7 +53,8 @@ public class UsaLlistaMedalles {
             System.out.println("7. Medals in a specific event and city");
             System.out.println("8. Delete medals by city and year");
             System.out.println("9. Delete medals by city, year, and event type");
-            System.out.println("10. Exit");
+            System.out.println("10. Delete and display verification for specific event, year, and city");
+            System.out.println("11. Exit");
 
             int choice = Integer.parseInt(teclat.nextLine());
 
@@ -115,7 +116,14 @@ public class UsaLlistaMedalles {
                     System.out.println("Medals deleted for specified city, year, and event.");
                     break;
                 case 10:
-                    llistaMedalles.sortir();
+                    System.out.println("Enter city, year, and event type for deletion and verification:");
+                    city = teclat.nextLine();
+                    year = Integer.parseInt(teclat.nextLine());
+                    event = teclat.nextLine();
+                    llistaMedalles.eliminarMedallesProva(city, year, event);  // Call to Function #10
+                    break;
+                case 11:
+                    llistaMedalles.sortir();  // Directly call sortir() for function #11
                     exit = true;
                     break;
                 default:
